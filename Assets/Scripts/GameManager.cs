@@ -32,7 +32,8 @@ namespace Assets.Scripts
         private void CreatePiff()
         {
             var index = _rndGenerator.Next(0, Piffs.Length);
-            Instantiate(Piffs[index].gameObject, PasheTransform.position + Vector3.up*5, Piffs[index].transform.rotation);
+            var newParticle = (GameObject) Instantiate(Piffs[index].gameObject, PasheTransform.position + Vector3.up*8, Piffs[index].transform.rotation);
+            newParticle.GetComponent<PiffScript>().Direction = PasheTransform;
         }
     }
 }

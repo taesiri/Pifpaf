@@ -13,9 +13,14 @@ namespace Assets
         public bool CanInstantiateInMiddleOfScreen = false;
         public bool CanRotate = false;
 
+        public bool AutoDirection = false;
+
+        public Transform Direction;
+
         public void Start()
         {
-            ScreenMargin = new Margin(-3.4f, 10, 3.4f, 0);
+            ScreenMargin = new Margin(-3.8f, 10, 3.8f, 0);
+
 
             if (CanInstantiateInMiddleOfScreen)
             {
@@ -44,6 +49,20 @@ namespace Assets
                         rRotation += 180;
                     }
                     transform.rotation = Quaternion.Euler(rRotation, 90, 90);
+                }
+            }
+        }
+
+
+        public void Update()
+        {
+            if (AutoDirection)
+            {
+                if (Direction)
+                {
+                    var angle = Mathf.Atan2(Direction.position.y - transform.position.y, transform.position.x - Direction.position.x)*Mathf.Rad2Deg;
+
+                    transform.rotation = Quaternion.Euler(new Vector3(angle, 90, 90));
                 }
             }
         }
