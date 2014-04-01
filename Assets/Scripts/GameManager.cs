@@ -12,12 +12,17 @@ namespace Assets.Scripts
         public Transform PasheTransform;
         public int DeployInterval = 1;
         private float _lastTick;
-
         public Margin ScreenMargin;
+
+        public BackgroundScript Bg1;
+        public BackgroundScript Bg2;
 
         public void Start()
         {
             _lastTick = Time.time;
+
+            Bg1.transform.position = new Vector3(transform.position.x, 11.9273f, -1);
+            Bg2.transform.position = new Vector3(transform.position.x, 11.9273f + Bg1.renderer.bounds.size.y, -1);
         }
 
         public void Update()

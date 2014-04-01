@@ -60,7 +60,7 @@ namespace Assets.Scripts
             guiMatrix.SetTRS(new Vector3(1, 1, 1), Quaternion.identity, new Vector3(ratio.x, ratio.y, 1));
             GUI.matrix = guiMatrix;
 
-         
+            GUI.Label(new Rect(10, 10, 500, 30), string.Format("{0}", Input.gyro.attitude));
 
             GUI.matrix = Matrix4x4.identity;
         }
@@ -70,6 +70,10 @@ namespace Assets.Scripts
             Debug.Log(other.gameObject.name);
         }
 
+        private void OnTriggerStay(Collider other)
+        {
+            Debug.Log(other.gameObject.name + "STAY");
+        }
 
         private int GyroSign(float value)
         {
