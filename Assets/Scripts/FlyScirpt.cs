@@ -12,6 +12,7 @@ namespace Assets.Scripts
         public GUILocationHelper Location = new GUILocationHelper();
         public GameManager Gmanger;
 
+        private int _lastSign = 0;
 
         private void Start()
         {
@@ -41,14 +42,13 @@ namespace Assets.Scripts
 
         private void HandleInputs()
         {
-            var xO = Input.GetAxis("Horizontal");
-
-            transform.position += Vector3.right*xO*HorizontalSpeed*Time.deltaTime;
-
-
 #if UNITY_IPHONE || UNITY_ANDROID
             //Boundary checks required 
-            transform.position += Vector3.right*Time.deltaTime*GyroSpeed*GyroSign(Input.gyro.attitude.x);
+            _lastSign = GyroSign(Input.gyro.attitude.x);
+            transform.position += Vector3.right*Time.deltaTime*GyroSpeed*_lastSign;
+#else
+            var xO = Input.GetAxis("Horizontal");
+            transform.position += Vector3.right*xO*HorizontalSpeed*Time.deltaTime;
 #endif
         }
 
@@ -61,6 +61,7 @@ namespace Assets.Scripts
             GUI.matrix = guiMatrix;
 
             GUI.Label(new Rect(10, 10, 500, 30), string.Format("{0}", Input.gyro.attitude));
+            GUI.Label(new Rect(10, 50, 500, 30), string.Format("{0}", _lastSign));
 
             GUI.matrix = Matrix4x4.identity;
         }
@@ -77,7 +78,7 @@ namespace Assets.Scripts
 
         private int GyroSign(float value)
         {
-            if (Mathf.Abs(value) < 0.01f) return 0;
+            if (Mathf.Abs(value) < 0.05f) return 0;
             if (value > 0) return 1;
             if (value < 0) return -1;
 
