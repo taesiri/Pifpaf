@@ -36,23 +36,9 @@ namespace Assets.Scripts
 
         private void CreatePiff()
         {
-            var index = GenerateIndex();
-
-            Piffs[index].gameObject.SetActive(true);
-            Piffs[index].transform.position = new Vector3(0, PasheTransform.position.y + 10, -1.7f);
-            Piffs[index].Setup();
-        }
-
-        private int GenerateIndex()
-        {
             var index = _rndGenerator.Next(0, Piffs.Length);
-
-            while (Piffs[index].State != ParticleStates.Idle)
-            {
-                index = _rndGenerator.Next(0, Piffs.Length);
-            }
-
-            return index;
+            var newParticle = (GameObject) Instantiate(Piffs[index].gameObject, PasheTransform.position + Vector3.up*8, Piffs[index].transform.rotation);
+            newParticle.GetComponent<PiffScript>().Direction = PasheTransform;
         }
     }
 }

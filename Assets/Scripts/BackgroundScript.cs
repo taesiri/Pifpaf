@@ -12,6 +12,7 @@ namespace Assets.Scripts
         public void Start()
         {
             Jump = 2*renderer.bounds.size.y;
+            Debug.Log(Jump);
         }
 
         public void Update()
