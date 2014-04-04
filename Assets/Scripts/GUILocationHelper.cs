@@ -7,6 +7,10 @@ namespace Assets.Scripts
         public float OriginalWidth = 449f;
         public float OriginalHeigth = 718f;
 
+
+        public float ActualWidth = Screen.width;
+        public float ActualHeight = Screen.height;
+
         public enum Point
         {
             TopLeft,
@@ -19,9 +23,15 @@ namespace Assets.Scripts
         public Point PointLocation = Point.TopLeft;
         public Vector2 Offset;
         public Vector2 GuiOffset;
+        public Vector2 CenterOfScreen;
 
         public void UpdateLocation()
         {
+            ActualWidth = Screen.width;
+            ActualHeight = Screen.height;
+
+            CenterOfScreen = new Vector2(ActualWidth / 2f, ActualHeight / 2f);
+
             switch (PointLocation)
             {
                 case Point.TopLeft:

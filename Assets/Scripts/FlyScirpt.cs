@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Microsoft.Win32;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -7,6 +8,7 @@ namespace Assets.Scripts
         public float VerticalSpeed = 1.0f;
         public float HorizontalSpeed = 10.0f;
         public float GyroSpeed = 2.0f;
+        public float MovementSpeed = 2.0f;
         public Transform PasheCam;
         public GUISkin MenuSkin;
         public GUILocationHelper Location = new GUILocationHelper();
@@ -29,8 +31,6 @@ namespace Assets.Scripts
 
             Location.PointLocation = GUILocationHelper.Point.Center;
             Location.UpdateLocation();
-
-            Input.gyro.enabled = true;
         }
 
 
@@ -43,6 +43,19 @@ namespace Assets.Scripts
         }
 
         private void HandleInputs()
+        {
+#if UNITY_IPHONE || UNITY_ANDROID
+            if (Input.touchCount > 0)
+            {
+                var sign = (Input.touches[0].position.x < Location.CenterOfScreen.x) ? -1 : 1;
+                transform.position += Vector3.right*Time.deltaTime*MovementSpeed*sign;
+            }
+#else
+
+#endif
+        }
+
+        private void HandleInputsGurp()
         {
 #if UNITY_IPHONE || UNITY_ANDROID
             //Boundary checks required 
@@ -61,13 +74,14 @@ namespace Assets.Scripts
             guiMatrix.SetTRS(new Vector3(1, 1, 1), Quaternion.identity, new Vector3(ratio.x, ratio.y, 1));
             GUI.matrix = guiMatrix;
 
-            GUI.Label(new Rect(10, 10, 500, 30), string.Format("{0}", Input.gyro.attitude));
-            GUI.Label(new Rect(10, 60, 500, 30), string.Format("{0}", Input.gyro.gravity));
-            GUI.Label(new Rect(10, 110, 500, 30), string.Format("{0}", Input.gyro.rotationRate));
-            GUI.Label(new Rect(10, 160, 500, 30), string.Format("{0}", Input.gyro.rotationRateUnbiased));
-            GUI.Label(new Rect(10, 210, 500, 30), string.Format("{0}", Input.gyro.updateInterval));
-            GUI.Label(new Rect(10, 260, 500, 30), string.Format("{0}", Input.gyro.userAcceleration));
-            GUI.Label(new Rect(10, 310, 500, 30), string.Format("{0}", _lastSign));
+            GUI.Label(new Rect(10, 10, 500, 30), string.Format("{0}:{1}", Screen.width, Screen.height));
+            GUI.Label(new Rect(10, 60, 500, 30), string.Format("{0}", Input.touches[0].position));
+
+            //GUI.Label(new Rect(10, 110, 500, 30), string.Format("{0}", Input.gyro.rotationRate));
+            //GUI.Label(new Rect(10, 160, 500, 30), string.Format("{0}", Input.gyro.rotationRateUnbiased));
+            //GUI.Label(new Rect(10, 210, 500, 30), string.Format("{0}", Input.gyro.updateInterval));
+            //GUI.Label(new Rect(10, 260, 500, 30), string.Format("{0}", Input.gyro.userAcceleration));
+            //GUI.Label(new Rect(10, 310, 500, 30), string.Format("{0}", _lastSign));
 
             GUI.matrix = Matrix4x4.identity;
         }
