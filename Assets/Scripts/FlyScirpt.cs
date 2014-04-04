@@ -36,13 +36,8 @@ namespace Assets.Scripts
 
         private void Update()
         {
-<<<<<<< HEAD
             transform.position += Vector3.up*VerticalSpeed*Time.deltaTime;
-            PasheCam.position += Vector3.up * VerticalSpeed * Time.deltaTime;
-=======
-            transform.position += Vector3.right*VerticalSpeed*Time.deltaTime;
-            PasheCam.position += Vector3.right*VerticalSpeed*Time.deltaTime;
->>>>>>> e08f73596904de2a16af8a2358aaa7553a829edb
+            PasheCam.position += Vector3.up*VerticalSpeed*Time.deltaTime;
 
             HandleInputs();
         }

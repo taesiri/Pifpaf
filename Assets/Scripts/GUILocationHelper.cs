@@ -4,13 +4,8 @@ namespace Assets.Scripts
 {
     public class GUILocationHelper
     {
-<<<<<<< HEAD
         public float OriginalWidth = 449f;
         public float OriginalHeigth = 718f;
-=======
-        public float OriginalWidth = 1149f;
-        public float OriginalHeigth = 818f;
->>>>>>> e08f73596904de2a16af8a2358aaa7553a829edb
 
         public enum Point
         {
