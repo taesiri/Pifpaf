@@ -1,12 +1,11 @@
-﻿using System.Runtime.InteropServices;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class GUILocationHelper
     {
-        public float OriginalWidth = 430f;
-        public float OriginalHeigth = 688f;
+        public float OriginalWidth = 449f;
+        public float OriginalHeigth = 718f;
 
         public enum Point
         {
