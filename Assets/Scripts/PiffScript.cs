@@ -1,10 +1,8 @@
 ﻿using System;
-using Assets.Scripts;
 using UnityEngine;
-using UnityEngineInternal;
 using Random = System.Random;
 
-namespace Assets
+namespace Assets.Scripts
 {
     public class PiffScript : MonoBehaviour
     {
@@ -12,16 +10,15 @@ namespace Assets
         public Margin ScreenMargin;
         public bool CanInstantiateInMiddleOfScreen = false;
         public bool CanRotate = false;
-
         public bool AutoDirection = false;
-
+        public ParticleStates State = ParticleStates.Idle;
         public Transform Direction;
 
-        public void Start()
+        public void Setup()
         {
+            State = ParticleStates.Busy;
+
             ScreenMargin = new Margin(-3.8f, 10, 3.8f, 0);
-
-
             if (CanInstantiateInMiddleOfScreen)
             {
                 var direction = _rndGenerator.Next(1, (int) (ScreenMargin.Right - ScreenMargin.Left*100))/100.0f - 2.5f;
@@ -63,6 +60,15 @@ namespace Assets
                     var angle = Mathf.Atan2(Direction.position.y - transform.position.y, transform.position.x - Direction.position.x)*Mathf.Rad2Deg;
 
                     transform.rotation = Quaternion.Euler(new Vector3(angle, 90, 90));
+                }
+            }
+
+            if (State == ParticleStates.Busy)
+            {
+                if (Direction.transform.position.y - transform.position.y > 7)
+                {
+                    State = ParticleStates.Idle;
+                    gameObject.SetActive(false);
                 }
             }
         }
