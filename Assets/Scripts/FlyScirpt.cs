@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -18,8 +17,6 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            Debug.Log(Screen.width);
-            Debug.Log(Screen.height);
             if (!PasheCam)
             {
                 Debug.LogError("Pashe Cam not found");
@@ -75,8 +72,11 @@ namespace Assets.Scripts
             GUI.matrix = guiMatrix;
 
             GUI.Label(new Rect(10, 10, 500, 30), string.Format("{0}:{1}", Screen.width, Screen.height));
-            GUI.Label(new Rect(10, 60, 500, 30), string.Format("{0}", Input.touches[0].position));
 
+            if (Input.touchCount > 0)
+            {
+                GUI.Label(new Rect(10, 60, 500, 30), string.Format("{0}", Input.touches[0].position));
+            }
             //GUI.Label(new Rect(10, 110, 500, 30), string.Format("{0}", Input.gyro.rotationRate));
             //GUI.Label(new Rect(10, 160, 500, 30), string.Format("{0}", Input.gyro.rotationRateUnbiased));
             //GUI.Label(new Rect(10, 210, 500, 30), string.Format("{0}", Input.gyro.updateInterval));
