@@ -13,7 +13,9 @@ namespace Assets.Scripts
         public GUILocationHelper Location = new GUILocationHelper();
         public GameManager Gmanger;
 
-        private int _lastSign = 0;
+        private int _lastSign;
+
+        private Matrix4x4 _guiMatrix = Matrix4x4.identity;
 
         private void Start()
         {
@@ -28,6 +30,10 @@ namespace Assets.Scripts
 
             Location.PointLocation = GUILocationHelper.Point.Center;
             Location.UpdateLocation();
+
+
+            Vector2 ratio = Location.GuiOffset;
+            _guiMatrix.SetTRS(new Vector3(1, 1, 1), Quaternion.identity, new Vector3(ratio.x, ratio.y, 1));
         }
 
 
@@ -45,19 +51,37 @@ namespace Assets.Scripts
             if (Input.touchCount > 0)
             {
                 var sign = (Input.touches[0].position.x < Location.CenterOfScreen.x) ? -1 : 1;
-                transform.position += Vector3.right*Time.deltaTime*MovementSpeed*sign;
+
+                if (sign == 1)
+                {
+                    if (transform.position.x < 2.7f)
+                    {
+                        transform.position += Vector3.right*Time.deltaTime*MovementSpeed;
+                    }
+                }
+                else if (sign == -1)
+                {
+                    if (transform.position.x > -2.5f)
+                    {
+                        transform.position += Vector3.left*Time.deltaTime*MovementSpeed;
+                    }
+                }
             }
 #else
 
 #endif
         }
 
-        private void HandleInputsGurp()
+        private void HandleInputGyroscope()
         {
 #if UNITY_IPHONE || UNITY_ANDROID
-            //Boundary checks required 
+            //Boundary checks required  --2.6 2.4
+
+
             _lastSign = GyroSign(Input.gyro.attitude.x + Input.gyro.attitude.y);
             transform.position += Vector3.right*Time.deltaTime*GyroSpeed*_lastSign;
+
+
 #else
             var xO = Input.GetAxis("Horizontal");
             transform.position += Vector3.right*xO*HorizontalSpeed*Time.deltaTime;
@@ -66,10 +90,7 @@ namespace Assets.Scripts
 
         public void OnGUI()
         {
-            Vector2 ratio = Location.GuiOffset;
-            Matrix4x4 guiMatrix = Matrix4x4.identity;
-            guiMatrix.SetTRS(new Vector3(1, 1, 1), Quaternion.identity, new Vector3(ratio.x, ratio.y, 1));
-            GUI.matrix = guiMatrix;
+            GUI.matrix = _guiMatrix;
 
             GUI.Label(new Rect(10, 10, 500, 30), string.Format("{0}:{1}", Screen.width, Screen.height));
 
@@ -77,11 +98,6 @@ namespace Assets.Scripts
             {
                 GUI.Label(new Rect(10, 60, 500, 30), string.Format("{0}", Input.touches[0].position));
             }
-            //GUI.Label(new Rect(10, 110, 500, 30), string.Format("{0}", Input.gyro.rotationRate));
-            //GUI.Label(new Rect(10, 160, 500, 30), string.Format("{0}", Input.gyro.rotationRateUnbiased));
-            //GUI.Label(new Rect(10, 210, 500, 30), string.Format("{0}", Input.gyro.updateInterval));
-            //GUI.Label(new Rect(10, 260, 500, 30), string.Format("{0}", Input.gyro.userAcceleration));
-            //GUI.Label(new Rect(10, 310, 500, 30), string.Format("{0}", _lastSign));
 
             GUI.matrix = Matrix4x4.identity;
         }
